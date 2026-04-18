@@ -5,16 +5,23 @@ ALLOWED_LEVELS = {"INFO", "WARN", "ERROR"}
 def parse_and_validate_line(line: str):
     """Return (timestamp, LEVEL, service, message) OR None."""
     try:
-        # TODO: implement the rules from assignment
-        # 1) strip line
-        # 2) if empty -> None
-        # 3) split by '|' and strip each field
-        # 4) if len != 4 -> None
-        # 5) reject empty fields
-        # 6) normalize level to uppercase
-        # 7) reject if level not allowed
-        # 8) return tuple
-        pass
+        s = line.strip()
+        if s == "":
+            return None
+
+        parts = [p.strip() for p in s.split("|")]
+        if len(parts) != 4:
+            return None
+
+        ts, level, svc, msg = parts
+        if ts == "" or level == "" or svc == "" or msg == "":
+            return None
+
+        level_norm = level.upper()
+        if level_norm not in ALLOWED_LEVELS:
+            return None
+
+        return (ts, level_norm, svc, msg)
     except Exception:
         return None
 
@@ -33,3 +40,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
